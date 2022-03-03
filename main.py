@@ -5,7 +5,7 @@ from data_processing.unzip import FileUnzip
 from data_processing.CSV_Filtration import CsvFiltration
 from data_processing.base_filter_by_week import FilterFinalData
 from data_processing.base_creation import BaseCreator
-
+from data_processing.delete_old_files import DeleteFiles
 
 if len(sys.argv) < 2:
     print("Please specify base directory!")
@@ -24,13 +24,16 @@ extract_direktorija.mkdir(parents=True, exist_ok=True)
 filter_direktorija.mkdir(parents=True, exist_ok=True)
 final_direktorija.mkdir(parents=True, exist_ok=True)
 
-AttachmentRetriever().retrieve(download_direktorija)
-print("-------------------------------------attachments saved--------------------------------")
-FileUnzip().unzip(download_direktorija, extract_direktorija)
-print("-------------------------------------files unziped--------------------------------")
-BaseCreator().creator(filter_direktorija)
-print("-------------------------------------created data base--------------------------------")
-CsvFiltration().firt_filtration(extract_direktorija, filter_direktorija)
-print("-------------------------------------first filtration done--------------------------------")
-FilterFinalData().final_data(filter_direktorija, final_direktorija)
-print("-------------------------------------data analyze done--------------------------------")
+# AttachmentRetriever().retrieve(download_direktorija)
+# print("-------------------------------------attachments saved--------------------------------")
+# FileUnzip().unzip(download_direktorija, extract_direktorija)
+# print("-------------------------------------files unziped--------------------------------")
+# BaseCreator().creator(filter_direktorija)
+# print("-------------------------------------created data base--------------------------------")
+# CsvFiltration().firt_filtration(extract_direktorija, filter_direktorija)
+# print("-------------------------------------first filtration done--------------------------------")
+# FilterFinalData().final_data(filter_direktorija, final_direktorija)
+# print("-------------------------------------data analyze done--------------------------------")
+DeleteFiles().delete(download_direktorija, extract_direktorija)
+print("-------------------------------------old files deleted--------------------------------")
+
