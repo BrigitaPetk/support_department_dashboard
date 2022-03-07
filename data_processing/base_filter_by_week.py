@@ -12,6 +12,7 @@ class FilterFinalData():
 
         total = [] 
         total_LT = []
+        total_LT_CTS = []
         total_AT =[]
         total_CH =[]
         total_DE =[]
@@ -63,6 +64,10 @@ class FilterFinalData():
             year = df1['Year'].unique()
             years.append(year[0])
             
+            #CTS counter:
+            df_LT_CTS =df1.loc[df1['Queue'].str.contains("CTS")]
+            rows_lt_cts, columns = df_LT_CTS.shape
+            total_LT_CTS.append(rows_lt_cts)
 
             # AT, CH DE IN LT
             df_AT = df1.loc[df1['Owner Country Code'] == 'AT']
@@ -311,20 +316,25 @@ class FilterFinalData():
         # print(f'total_IN: {total_IN}')
 
 
+        base_by_week = pd.read_csv(f'{final_direktorija}/base_by_week.csv', sep=';')
+        base_by_week.index = pd.MultiIndex.from_arrays(base_by_week[['Year', 'Week']].values.T, names=['idx1', 'idx2'])
 
         data = {'Year':years, 'Week': week_number,'request number': total,'request number in LT': total_LT, 
                 'request number in AT':total_AT , 'request number in CH':total_CH ,
                 'request number in DE':total_DE , 'request number in IN':total_IN ,
                 'IMP request number': total_LT_IMP, 'SMART request number':totoal_LT_SMART, 'STRAT request number': total_LT_STRAT,
                 'EMPTY request number': total_LT_EMPTY, 'LT request number in DE':total_LT_DE,
-                'LT request number in CH':total_LT_CH, 'LT request number in AT':total_LT_AT,
+                'LT request number in CH':total_LT_CH, 'LT request number in AT':total_LT_AT, 'LT CTS': total_LT_CTS,
                 'knowledge level empty': know0,  'knowledge level 1': know1, 
                 'knowledge level 2': know2, 'knowledge level 3': know3, 'knowledge level 4': know4,
                 'STRAT solution time': STRAT_solution, 'IMP solution time': IMP_solution, 'SMART solution time': SMART_solution,
                 'EMPTY solution time': TUST_solution, 'Intake': Intake_average }
 
         week_df = pd.DataFrame(data)
+        week_df.index = pd.MultiIndex.from_arrays(week_df[['Year', 'Week']].values.T, names=['idx1', 'idx2'])
 
-        week_df.to_csv(f'{final_direktorija}/base_by_week.csv', sep=';', index=False)
+        final_data_by_week = base_by_week.combine_first(week_df)
+
+        final_data_by_week.to_csv(f'{final_direktorija}/base_by_week.csv', sep=';', index=False)
 
         print("data analyze done")
