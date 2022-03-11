@@ -26,7 +26,7 @@ class AttachmentRetriever():
             exit()
 
 
-        for message in list(messages)[-8:]:     
+        for message in list(messages)[-10:]:     
             subject = message.Subject
             sender = message.SenderEmailAddress
             time =  message.Senton.date()
