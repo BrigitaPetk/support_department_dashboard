@@ -1,6 +1,7 @@
 import sys
 from pathlib import Path
-from data_processing.outlook import AttachmentRetriever
+# from data_processing.outlook_local import AttachmentRetriever
+from data_processing.outlook_server import AttachmentRetrieverServer
 from data_processing.unzip import FileUnzip
 from data_processing.CSV_Filtration import CsvFiltration
 from data_processing.base_filter_by_week import FilterFinalData
@@ -24,7 +25,9 @@ extract_direktorija.mkdir(parents=True, exist_ok=True)
 filter_direktorija.mkdir(parents=True, exist_ok=True)
 final_direktorija.mkdir(parents=True, exist_ok=True)
 
-AttachmentRetriever().retrieve(download_direktorija)
+# AttachmentRetriever().retrieve(download_direktorija)
+# print("-------------------------------------attachments saved--------------------------------")
+AttachmentRetrieverServer().retrieve_server(download_direktorija)
 print("-------------------------------------attachments saved--------------------------------")
 FileUnzip().unzip(download_direktorija, extract_direktorija)
 print("-------------------------------------files unziped--------------------------------")
@@ -36,4 +39,3 @@ FilterFinalData().final_data(filter_direktorija, final_direktorija)
 print("-------------------------------------data analyze done--------------------------------")
 DeleteFiles().delete(download_direktorija, extract_direktorija)
 print("-------------------------------------old files deleted--------------------------------")
-
