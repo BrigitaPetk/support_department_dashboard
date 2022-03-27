@@ -6,7 +6,9 @@ from data_processing.unzip import FileUnzip
 from data_processing.CSV_Filtration import CsvFiltration
 from data_processing.base_filter_by_week import FilterFinalData
 from data_processing.base_creation import BaseCreator
-from data_processing.delete_old_files import DeleteFiles
+# from data_processing.delete_old_files import DeleteFiles
+# from data_processing.delete_old_data import DataDelete
+from data_processing.base_filter_by_month import CsvFiltrationMonths
 
 if len(sys.argv) < 2:
     print("Please specify base directory!")
@@ -37,5 +39,9 @@ CsvFiltration().firt_filtration(extract_direktorija, filter_direktorija)
 print("-------------------------------------first filtration done--------------------------------")
 FilterFinalData().final_data(filter_direktorija, final_direktorija)
 print("-------------------------------------data analyze done--------------------------------")
-DeleteFiles().delete(download_direktorija, extract_direktorija)
-print("-------------------------------------old files deleted--------------------------------")
+CsvFiltrationMonths().filtration_month(filter_direktorija, final_direktorija)
+print("-------------------------------------base by month--------------------------------")
+# DeleteFiles().delete(download_direktorija, extract_direktorija)
+# print("-------------------------------------old files deleted--------------------------------")
+# DataDelete().delete_old_data(filter_direktorija)
+# print("-------------------------------------old data data--------------------------------")

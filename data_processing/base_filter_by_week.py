@@ -9,6 +9,7 @@ class FilterFinalData():
         week_number = list(df['Week'].unique()) 
 
         years = []
+        month_list =[]
 
         total = [] 
         total_LT = []
@@ -48,6 +49,8 @@ class FilterFinalData():
         know5 = []
         know6 = []
         know0 = []
+        level12 = []
+        level34 = []
 
 
         for week in week_number:
@@ -56,13 +59,16 @@ class FilterFinalData():
             
             total_number = df1['TecReq#'].count()  
             total.append(total_number)
-            
-            df_lt = df1.loc[df1['Owner Country Code'] == 'LT']
+    
+            df_lt = df1.loc[df1['Owner Country Code'].str.contains("LT|IT") == True]
             rows_lt, columns = df_lt.shape
             total_LT.append(rows_lt)
 
             year = df1['Year'].unique()
             years.append(year[0])
+
+            month = df1['Month'].unique()
+            month_list.append(month[0])
             
             #CTS counter:
             df_LT_CTS =df1.loc[df1['Queue'].str.contains("CTS")]
@@ -150,13 +156,17 @@ class FilterFinalData():
             except ZeroDivisionError:
                 STRAT_solution.append(0)
 
-            
-            IMP_sol = round((S_IMP_in_time/(S_IMP_in_time+S_IMP_late))*100)
-            IMP_solution.append(IMP_sol)
-            
-            SMART_sol = round((S_SMART_in_time/(S_SMART_in_time+S_SMART_late))*100)
-            SMART_solution.append(SMART_sol)
-            
+            try:
+                IMP_sol = round((S_IMP_in_time/(S_IMP_in_time+S_IMP_late))*100)
+                IMP_solution.append(IMP_sol)
+            except ZeroDivisionError:
+                IMP_solution.append(0)
+            try:
+                SMART_sol = round((S_SMART_in_time/(S_SMART_in_time+S_SMART_late))*100)
+                SMART_solution.append(SMART_sol)
+            except ZeroDivisionError:
+                SMART_solution.append(0)
+
             try:
                 TUST_sol = round((S_EMPTY_in_time/(S_EMPTY_in_time+S_EMPTY_late))*100)
                 TUST_solution.append(TUST_sol)
@@ -250,6 +260,9 @@ class FilterFinalData():
             rows2, columns = level2.shape
             know2.append(rows2)
             
+            lvl12 = rows2+rows1
+            level12.append(lvl12)
+
             level3 = df_lt.loc[df_lt['Needed knowledge level'] == "3 - Product Repair"]
             rows3, columns = level3.shape
             know3.append(rows3)
@@ -257,6 +270,9 @@ class FilterFinalData():
             level4 = df_lt.loc[df_lt['Needed knowledge level'] =="4 - Interaction / systems with other Festo components or special software necessary"]
             rows4, columns = level4.shape
             know4.append(rows4)
+
+            lvl34 = rows3+rows4
+            level34.append(lvl34)
 
             level5 = df_lt.loc[df_lt['Needed knowledge level'] =="5 - Interaction/systems with 3rd party products"]
             rows5, columns = level5.shape
@@ -270,63 +286,18 @@ class FilterFinalData():
             know0.append(empty_level)
             
             
-        # print(f'metai:{years}')
-        # print('---------------')
+   
 
-        # print(f'bendras uzklausu skaicius 2{total}')
-        # print(f'bendras lietuva :{total_LT}')
-        # print(f'DE apdorota lietuvoje{total_LT_DE}')  
-        # print(f'CH apdorota lietuvoje{total_LT_CH}')
-        # print(f'AT apdorota lietuvoje{total_LT_AT}')
-        # print('---------------')
-        # print(f'STRAT kiekis :{total_LT_STRAT}')
-        # print(f'IMP kiekis :{total_LT_IMP}') 
-        # print(f'SMART kiekis :{totoal_LT_SMART}') 
-        # print(f'Tuscios kiekis :{total_LT_EMPTY}') 
-        # print('---------------')
-        # print(f'parasyta laisku{letter_number}')
-        # print('---------------')
-
-        # print('---------------')
-        # print(f'knowlage level nenustatytas:{know0}')
-        # print(f'knowlage level 1: {know1}')
-        # print(f'knowlage level 2: {know2}')
-        # print(f'knowlage level 3: {know3}')
-        # print(f'knowlage level 4: {know4}')
-        # print(f'knowlage level 5: {know5}')
-        # print(f'knowlage level 6: {know6}')
-            
-        # print('---------------')
-        # print(f'STRAT solution: {STRAT_solution}')
-        # print(f'IMP solution: {IMP_solution}')      
-        # print(f'SMART solution: {SMART_solution}')
-        # print(f'TUST solution: {TUST_solution}')   
-
-        # print('---------------')
-        # print(f'STRAT intake: {STRAT_intake}')
-        # print(f'IMP intake: {IMP_intake}')      
-        # print(f'SMART intake: {SMART_intake}')
-        # print(f'TUST intake: {TUST_intake}')  
-        # print(f'TUST intake: {Intake_average}')  
-
-        # print('---------------')
-        # print(f'total_AT: {total_AT}') 
-        # print(f'total_CH: {total_CH}')
-        # print(f'total_DE: {total_DE}')
-        # print(f'total_IN: {total_IN}')
-
-
-        base_by_week = pd.read_csv(f'{final_direktorija}/base_by_week.csv', sep=';')
+        base_by_week = pd.read_csv(f'{final_direktorija}/base_by_week.csv', sep=',')
         base_by_week.index = pd.MultiIndex.from_arrays(base_by_week[['Year', 'Week']].values.T, names=['idx1', 'idx2'])
 
-        data = {'Year':years, 'Week': week_number,'request number': total,'request number in LT': total_LT, 
+        data = {'Year':years,  'Month':month_list, 'Week': week_number,'request number': total,'request number in LT': total_LT, 
                 'request number in AT':total_AT , 'request number in CH':total_CH ,
                 'request number in DE':total_DE , 'request number in IN':total_IN ,
                 'IMP request number': total_LT_IMP, 'SMART request number':totoal_LT_SMART, 'STRAT request number': total_LT_STRAT,
                 'EMPTY request number': total_LT_EMPTY, 'LT request number in DE':total_LT_DE,
                 'LT request number in CH':total_LT_CH, 'LT request number in AT':total_LT_AT, 'LT CTS': total_LT_CTS,
-                'knowledge level empty': know0,  'knowledge level 1': know1, 
-                'knowledge level 2': know2, 'knowledge level 3': know3, 'knowledge level 4': know4,
+                'knowledge level empty': know0,  'knowledge level 1-2': level12,  'knowledge level 3-4': level34,
                 'STRAT solution time': STRAT_solution, 'IMP solution time': IMP_solution, 'SMART solution time': SMART_solution,
                 'EMPTY solution time': TUST_solution, 'Intake': Intake_average }
 
@@ -335,6 +306,9 @@ class FilterFinalData():
 
         final_data_by_week = base_by_week.combine_first(week_df)
 
-        final_data_by_week.to_csv(f'{final_direktorija}/base_by_week.csv', sep=';', index=False)
+        last_four_weeks =final_data_by_week.iloc[-5:-1]
+        last_four_weeks.to_csv(f'{final_direktorija}/base_by_last_weeks.csv', sep=',', index=False)
+
+        final_data_by_week.to_csv(f'{final_direktorija}/base_by_week.csv', sep=',', index=False)
 
         print("data analyze done")

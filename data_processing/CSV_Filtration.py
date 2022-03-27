@@ -15,7 +15,7 @@ class CsvFiltration():
             data = pd.read_csv(x, delimiter=';', engine='python')
             df1 = data[['TecReq#', 'Created', 'First Lock', 'FirstResponse', 'Close Time', 'Queue', 'Owner Country Code', 'State', 'Number of Articles', 'Needed knowledge level', 'Case CV']]
             df2 = df1.loc[df1['State'] != "merged"]
-            final_data = df2.loc[df2['Queue'].str.contains("TH_DE|TH_AT|TH_CH")]
+            final_data = df2.loc[df2['Queue'].str.contains("TH_DE|TH_AT|TH_CH|TH_IT")]
 
             # added 3h
             columns = ['Created','First Lock', 'FirstResponse', 'Close Time']
@@ -235,12 +235,14 @@ class CsvFiltration():
                 r = str(row['Created'])
                 x = datetime.datetime.fromisoformat(r)
                 date_numbers = x.isocalendar()
+                month = x.month
+                final_data.loc[index,'Month'] = month
                 final_data.loc[index,'Year'] = int(date_numbers[0])
                 final_data.loc[index,'Week'] = int(date_numbers[1])
                 
                 
 
-            new_data = final_data[['TecReq#', 'Year', 'Week', 'Created+3mod', 'First Lock+3mod', 'FirstResponse+3mod', 'Close Time+3mod', 
+            new_data = final_data[['TecReq#', 'Year','Month', 'Week', 'Created+3mod', 'First Lock+3mod', 'FirstResponse+3mod', 'Close Time+3mod', 
                                         'First Response - Created', 'First Lock - Created', 'Queue', 'Owner Country Code', 'State', 'Number of Articles', 
                                         'Needed knowledge level', 'Case CV']]
         
