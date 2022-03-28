@@ -1,7 +1,7 @@
 import sys
 from pathlib import Path
-# from data_processing.outlook_local import AttachmentRetriever
-from data_processing.outlook_server import AttachmentRetrieverServer
+from data_processing.outlook_local import AttachmentRetriever
+# from data_processing.outlook_server import AttachmentRetrieverServer
 from data_processing.unzip import FileUnzip
 from data_processing.CSV_Filtration import CsvFiltration
 from data_processing_GB.CSV_Filtration import CsvFiltration_GB
@@ -33,14 +33,13 @@ final_direktorija.mkdir(parents=True, exist_ok=True)
 filter_direktorija_GB.mkdir(parents=True, exist_ok=True)
 final_direktorija_GB.mkdir(parents=True, exist_ok=True)
 
-# AttachmentRetriever().retrieve(download_direktorija)
-# print("-------------------------------------attachments saved--------------------------------")
-AttachmentRetrieverServer().retrieve_server(download_direktorija)
+AttachmentRetriever().retrieve(download_direktorija)
 print("-------------------------------------attachments saved--------------------------------")
+# AttachmentRetrieverServer().retrieve_server(download_direktorija)
+# print("-------------------------------------attachments saved--------------------------------")
 FileUnzip().unzip(download_direktorija, extract_direktorija)
 print("-------------------------------------files unziped--------------------------------")
-BaseCreator().creator(filter_direktorija, final_direktorija)
-BaseCreator().creator_GB(filter_direktorija_GB, final_direktorija_GB)
+BaseCreator().creator(filter_direktorija, final_direktorija, filter_direktorija_GB, final_direktorija_GB)
 print("-------------------------------------created data base--------------------------------")
 CsvFiltration().firt_filtration(extract_direktorija, filter_direktorija)
 CsvFiltration_GB().firt_filtration(extract_direktorija, filter_direktorija_GB)
@@ -48,11 +47,9 @@ print("-------------------------------------first filtration done---------------
 FilterFinalData().final_data(filter_direktorija, final_direktorija)
 FilterFinalData_GB().final_data(filter_direktorija_GB, final_direktorija_GB)
 print("-------------------------------------data analyze done--------------------------------")
-CsvFiltrationMonths().filtration_month(filter_direktorija, final_direktorija)
-CsvFiltrationMonths().filtration_month_GB(filter_direktorija_GB, final_direktorija_GB)
+CsvFiltrationMonths().filtration_month(filter_direktorija, final_direktorija, filter_direktorija_GB, final_direktorija_GB)
 print("-------------------------------------base by month--------------------------------")
 # DeleteFiles().delete(download_direktorija, extract_direktorija)
 # print("-------------------------------------old files deleted--------------------------------")
-# DataDelete().delete_old_data(filter_direktorija)
-# DataDelete().delete_old_data_GB(filter_direktorija_GB)
+# DataDelete().delete_old_data(filter_direktorija, filter_direktorija_GB)
 # print("-------------------------------------old data data--------------------------------")
