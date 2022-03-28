@@ -54,4 +54,5 @@ print("-------------------------------------base by month-----------------------
 # DeleteFiles().delete(download_direktorija, extract_direktorija)
 # print("-------------------------------------old files deleted--------------------------------")
 # DataDelete().delete_old_data(filter_direktorija)
+# DataDelete().delete_old_data_GB(filter_direktorija_GB)
 # print("-------------------------------------old data data--------------------------------")
