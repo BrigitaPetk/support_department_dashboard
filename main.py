@@ -3,8 +3,8 @@ from pathlib import Path
 from data_processing.outlook_local import AttachmentRetriever
 # from data_processing.outlook_server import AttachmentRetrieverServer
 from data_processing.unzip import FileUnzip
+# from data_processing.CSV_Filtration import CsvFiltration
 from data_processing.CSV_Filtration import CsvFiltration
-from data_processing_GB.CSV_Filtration import CsvFiltration_GB
 from data_processing.base_filter_by_week import FilterFinalData
 from data_processing_GB.base_filter_by_week import FilterFinalData_GB
 from data_processing.base_creation import BaseCreator
@@ -41,8 +41,8 @@ FileUnzip().unzip(download_direktorija, extract_direktorija)
 print("-------------------------------------files unziped--------------------------------")
 BaseCreator().creator(filter_direktorija, final_direktorija, filter_direktorija_GB, final_direktorija_GB)
 print("-------------------------------------created data base--------------------------------")
-CsvFiltration().firt_filtration(extract_direktorija, filter_direktorija)
-CsvFiltration_GB().firt_filtration(extract_direktorija, filter_direktorija_GB)
+CsvFiltration().first_filtration_GB(extract_direktorija, filter_direktorija_GB)
+CsvFiltration().first_filtration(extract_direktorija, filter_direktorija)
 print("-------------------------------------first filtration done--------------------------------")
 FilterFinalData().final_data(filter_direktorija, final_direktorija)
 FilterFinalData_GB().final_data(filter_direktorija_GB, final_direktorija_GB)

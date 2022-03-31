@@ -127,7 +127,7 @@ class FilterFinalData():
                 client = str(row['Case CV'])
                 delta = pd.to_timedelta(date)
                 
-                if date == 'nan':
+                if date == 'nan' or date == 'NaN':
                     S_unanswered = S_unanswered +1
                 elif client == 'nan':
                     if delta < datetime.timedelta(hours=6):
@@ -191,7 +191,7 @@ class FilterFinalData():
                 client = str(row['Case CV'])
                 delta = pd.to_timedelta(date)
                 
-                if date == 'nan':
+                if date == 'nan' or date == 'NaN':
                     I_unanswered = I_unanswered +1
                 elif client == 'nan':
                     if delta < datetime.timedelta(hours=6):
@@ -214,15 +214,23 @@ class FilterFinalData():
                     else:
                         I_SMART_late = I_SMART_late +1
             
+            try:
+                I_STRAT = round((I_STRAT_in_time/(I_STRAT_in_time+I_STRAT_late))*100)
+                STRAT_intake.append(I_STRAT)
+            except ZeroDivisionError:
+                STRAT_intake.append(0)
             
-            I_STRAT = round((I_STRAT_in_time/(I_STRAT_in_time+I_STRAT_late))*100)
-            STRAT_intake.append(I_STRAT)
+            try:
+                I_IMP = round((I_IMP_in_time/(I_IMP_in_time+I_IMP_late))*100)
+                IMP_intake.append(I_IMP)
+            except ZeroDivisionError:
+                IMP_intake.append(0)
             
-            I_IMP = round((I_IMP_in_time/(I_IMP_in_time+I_IMP_late))*100)
-            IMP_intake.append(I_IMP)
-            
-            I_SMART = round((I_SMART_in_time/(I_SMART_in_time+I_SMART_late))*100)
-            SMART_intake.append(I_SMART)
+            try:
+                I_SMART = round((I_SMART_in_time/(I_SMART_in_time+I_SMART_late))*100)
+                SMART_intake.append(I_SMART)
+            except ZeroDivisionError:
+                SMART_intake.append(0)
             
             try:
                 I_TUST = round((I_EMPTY_in_time/(I_EMPTY_in_time+I_EMPTY_late))*100)
