@@ -21,9 +21,12 @@ class CsvFiltrationMonths():
                 rows_lt, columns = df_lt.shape
                 total_LT.append(rows_lt)
 
+            base_by_month = pd.read_csv(f'{in_location}/{data_name}.csv', delimiter=',', engine='python').set_index('Month')
+
             data = {'Month':month_name, 'Request number': request_number, 'Request number LT': total_LT}
             month_data = pd.DataFrame(data)
-            month_data.to_csv(f"{in_location}/{data_name}.csv", sep=',', index=False)
+            final_data_by_month = base_by_month.combine_first(month_data.set_index('Month'))
+            final_data_by_month.to_csv(f"{in_location}/{data_name}.csv", sep=',', index=False)
         
         months(filter_direktorija, final_direktorija, 'base','base_by_month')
         months(filter_direktorija_GB, final_direktorija_GB, 'base_GB','base_by_month_GB')

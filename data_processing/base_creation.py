@@ -1,5 +1,6 @@
 import pandas as pd
 from pathlib import Path
+import os
 
 
 class BaseCreator():
@@ -36,7 +37,6 @@ class BaseCreator():
             else: 
                 print("not empty folder")
 
-
         def filtration_by_week_creator_GB(location, name):
             final_files = list(location.glob("*.csv*"))
             if not final_files:
@@ -53,9 +53,25 @@ class BaseCreator():
                 print("final data base was created")
             else: 
                 print("not empty folder")
-                   
+
+        def base_by_month_creator(location, name):
+            filter_files = list(location.glob("*.csv*"))
+            file_names = [Path(file).name for file in filter_files]
+            for file_name in file_names:
+                if file_name != f"{name}.csv":
+                    data = {'Month':[], 'Request number': [], 'Request number LT': []}
+                    df = pd.DataFrame(data)
+                    df.to_csv(f'{location}/{name}.csv', sep=',', index=False)
+                    print("base by month was created")
+                else: 
+                    print("month file already exists")
+
+
+
         base_creator(filter_direktorija, 'base')
         base_creator(filter_direktorija_GB, 'base_GB')
         filtration_by_week_creator(final_direktorija, 'base_by_week')
         filtration_by_week_creator_GB(final_direktorija_GB, 'base_by_week')
+        base_by_month_creator(final_direktorija, "base_by_month")
+        base_by_month_creator(final_direktorija_GB, "base_by_month_GB")
             
